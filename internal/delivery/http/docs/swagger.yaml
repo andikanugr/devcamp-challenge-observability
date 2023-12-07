@@ -1,0 +1,109 @@
+basePath: /api
+definitions:
+  entity.Priority:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - PriorityLow
+    - PriorityMedium
+    - PriorityHigh
+  entity.Todo:
+    properties:
+      description:
+        type: string
+      is_done:
+        type: boolean
+      priority:
+        $ref: '#/definitions/entity.Priority'
+      title:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for using Swagger with Echo.
+  title: Swagger Todo App API
+  version: "1.0"
+paths:
+  /todos:
+    get:
+      consumes:
+      - application/json
+      description: Get todos
+      operationId: get-todos
+      produces:
+      - application/json
+      responses: {}
+      summary: Get todos
+    post:
+      consumes:
+      - application/json
+      description: Add todo
+      operationId: add-todo
+      parameters:
+      - description: Todo
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Todo'
+      produces:
+      - application/json
+      responses: {}
+      summary: Add todo
+  /todos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete todo
+      operationId: delete-todo
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete todo
+    get:
+      consumes:
+      - application/json
+      description: Get todo by id
+      operationId: get-todo-by-id
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Get todo by id
+    put:
+      consumes:
+      - application/json
+      description: Update todo
+      operationId: update-todo
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Todo
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Todo'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update todo
+swagger: "2.0"

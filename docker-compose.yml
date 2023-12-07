@@ -1,0 +1,76 @@
+version: '3.1'
+
+services:
+  todo-app:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    environment:
+      - ENV=production
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    volumes:
+      - ./files/logs:/app/files/logs
+      - ./files/config:/app/files/config
+    restart: always
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: devcamp-todo-2023
+    ports:
+      - 5440:5432
+    volumes:
+        - ./files/database:/docker-entrypoint-initdb.d
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./files/prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9090:9090
+    restart: always
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./files/promtail/promtail.yml:/etc/promtail/config.yml
+      - ./files/logs:/var/log
+    command:
+      - --config.file=/etc/promtail/config.yml
+    restart: always
+    depends_on:
+      - loki
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # Jaeger UI
+      - "6831:6831/udp" # Jaeger compact thrift
+      - "14268:14268" # Jaeger compact thrift over HTTP
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - prometheus
+      - loki
+      - jaeger
+

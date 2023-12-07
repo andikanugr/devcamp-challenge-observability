@@ -1,0 +1,12 @@
+# config.yaml
+app:
+  port: "8080"
+
+vendor:
+  database:
+    driver: "postgres"
+    data_source: "host=postgres port=5432 user=postgres password=mysecretpassword dbname=devcamp-todo-2023 sslmode=disable"
+    max_open_conns: 10
+    max_idle_conns: 5
+    max_conn_life_time: "30m"
+    max_conn_idle_time: "15m"

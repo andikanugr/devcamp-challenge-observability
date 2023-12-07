@@ -1,0 +1,3 @@
+{"error":"missing destination name is_done in *[]entity.Todo","level":"error","msg":"[failed to get todos]","time":"2023-12-06T15:29:20Z"}
+{"error":"missing destination name is_done in *[]entity.Todo","level":"error","msg":"[failed to get todos]","time":"2023-12-06T15:35:01Z"}
+{"error":"sql: no rows in result set","id":1,"level":"error","msg":"[failed to get todo on getting todo by id]","time":"2023-12-07T00:48:49Z"}
